@@ -1,6 +1,7 @@
 package com.alea.pokeapi.pokemon.infraestructure.api.controllers;
 
 import com.alea.pokeapi.pokemon.application.CreatePokemonUseCase;
+import com.alea.pokeapi.pokemon.application.UpdatePokemonListUseCase;
 import com.alea.pokeapi.pokemon.infraestructure.clients.PokeApiClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +15,12 @@ public class PokemonController {
 
     private final PokeApiClient pokeApiClient;
     private final CreatePokemonUseCase createPokemonUseCase;
+    private final UpdatePokemonListUseCase updatePokemonListUseCase;
 
     @GetMapping
     public void test() {
-        System.out.println(pokeApiClient.countPokemons().block());
-        System.out.println(pokeApiClient.getPokemon(1).map(createPokemonUseCase::createPokemon).block());
+        //System.out.println(pokeApiClient.countPokemon().block());
+        //System.out.println(pokeApiClient.getPokemon(1).flatMap(createPokemonUseCase::createPokemon).block());
+        updatePokemonListUseCase.updateList().blockLast();
     }
 }

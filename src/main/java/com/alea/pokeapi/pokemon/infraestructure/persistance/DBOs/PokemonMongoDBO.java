@@ -1,6 +1,6 @@
 package com.alea.pokeapi.pokemon.infraestructure.persistance.DBOs;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,20 +8,22 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.LocalDateTime;
 
-@Data
-@Document("pokemon")
+@Document(collection = "pokemon")
+@Getter
+@Builder
 public class PokemonMongoDBO {
 
     @MongoId
-    private String internalId;
-    private Integer id;
-    private String name;
-    private Integer height;
-    private Integer weight;
+    private final String internalId;
+    private final Integer id;
+    private final String name;
+    private final Integer height;
+    private final Integer weight;
+    private final Integer baseExperience;
 
     @LastModifiedDate
-    private LocalDateTime lastUpdated;
+    private final LocalDateTime lastUpdated;
 
     @Version
-    private long version;
+    private final long version;
 }

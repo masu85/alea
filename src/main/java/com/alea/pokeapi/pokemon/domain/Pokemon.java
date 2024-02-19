@@ -1,18 +1,16 @@
 package com.alea.pokeapi.pokemon.domain;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-import java.util.UUID;
-
-@Data
+@Getter
 @Builder
 public class Pokemon {
-
-    private final UUID internalId;
+    private final String internalId;
     private Integer id;
     private String name;
     private Integer height;
     private Integer weight;
+    private Integer baseExperience;
 }
 
