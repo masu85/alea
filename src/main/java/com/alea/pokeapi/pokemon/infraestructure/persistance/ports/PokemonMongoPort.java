@@ -36,4 +36,9 @@ public class PokemonMongoPort implements PokemonRepository {
     public Flux<Pokemon> getAll() {
         return pokemonDataBaseAdapter.findAll().map(pokemonDataBaseMapper::dataBaseToPokemon);
     }
+
+    @Override
+    public Mono<Boolean> existById(Integer id) {
+        return pokemonDataBaseAdapter.existsById(String.valueOf(id));
+    }
 }
