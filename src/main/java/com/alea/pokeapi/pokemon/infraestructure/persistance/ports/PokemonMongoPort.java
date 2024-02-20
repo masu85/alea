@@ -22,6 +22,7 @@ public class PokemonMongoPort implements PokemonRepository {
 
     @Override
     public Mono<Pokemon> createPokemon(Pokemon pokemon) {
+        //System.out.println(pokemon.getName());
         var pokemonDBO = pokemonDataBaseMapper.pokemonToDataBase(pokemon);
         return pokemonDataBaseAdapter.save(pokemonDBO).map(pokemonDataBaseMapper::dataBaseToPokemon);
     }

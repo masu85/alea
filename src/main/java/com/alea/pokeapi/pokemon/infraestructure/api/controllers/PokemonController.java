@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @RestController
 @RequestMapping("/pokemon")
 @RequiredArgsConstructor
@@ -19,8 +22,11 @@ public class PokemonController {
 
     @GetMapping
     public void test() {
+        Instant start = Instant.now();
         //System.out.println(pokeApiClient.countPokemon().block());
-        //System.out.println(pokeApiClient.getPokemon(1).flatMap(createPokemonUseCase::createPokemon).block());
-        updatePokemonListUseCase.updateList().blockLast();
+        //System.out.println(pokeApiClient.getPokemon(6).flatMap(createPokemonUseCase::createPokemon).block());
+        updatePokemonListUseCase.updateList().sequential().blockLast();
+        Instant end = Instant.now();
+        System.out.println(Duration.between(start, end).toMillis());
     }
 }

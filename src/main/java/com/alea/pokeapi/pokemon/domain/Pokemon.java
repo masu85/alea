@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Pokemon {
-    private final String internalId;
     private Integer id;
     private String name;
     private Integer height;

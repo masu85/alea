@@ -3,12 +3,12 @@ package com.alea.pokeapi.pokemon.application;
 import com.alea.pokeapi.pokemon.domain.Pokemon;
 import com.alea.pokeapi.pokemon.domain.PokemonExternalData;
 import com.alea.pokeapi.pokemon.domain.PokemonRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.util.function.Tuple2;
-
-import java.util.List;
+import reactor.core.publisher.ParallelFlux;
 
 @Service
 @RequiredArgsConstructor
@@ -17,25 +17,36 @@ public class UpdatePokemonListUseCase {
     private final PokemonRepository pokemonRepository;
     private final PokemonExternalData pokemonExternalData;
 
-    private final GetPokemonDataUseCase getPokemonDataUseCase;
+    @EventListener(ApplicationReadyEvent.class)
+    public void init() {
+        //First populate on Startup
+        updateList()
+                .doOnComplete(() -> System.out.println("Carga inicial finalizada"))
+                .subscribe();
+    }
 
-    public Flux<String> updateList() {
+    public ParallelFlux<Pokemon> updateList() {
 
         var offset = 0;
+        var pokemonExternalFlux = pokemonExternalData.countPokemon()
+                .flatMapMany(numPokemons -> pokemonExternalData.getExistingPokemons(offset, numPokemons));
 
-        Flux<Tuple2<String, String>> pokemonExternalFlux = pokemonExternalData.countPokemon()
-                .flatMapMany(numPokemons -> pokemonExternalData.getExistingPokemon(offset, numPokemons));
+        var pokemonDatabaseFlux = pokemonRepository.getAll();
 
-        Flux<Pokemon> pokemonDatabaseFlux = pokemonRepository.getAll();
-
-        return pokemonExternalFlux.filterWhen(tuple ->
-            pokemonDatabaseFlux.filter(pokemon -> pokemon.getName().equals(tuple.getT1()))
-                    .hasElements()
-                    .map(hasElements -> !hasElements)
-        )
-        .map(tupla2 -> {
-            System.out.println(tupla2.getT2());
-            return tupla2.getT2();
-        });
+        return pokemonDatabaseFlux
+                .collectList()
+                .flatMapMany(pokemonDataBaseList ->
+                    pokemonExternalFlux
+                            .filter(pokemonExternal ->
+                                    pokemonDataBaseList.stream().noneMatch(pokemon ->
+                                            pokemon.getName().equals(pokemonExternal.getT1())
+                                    )
+                            )
+                            .flatMap(pokemonExternal ->
+                                    pokemonExternalData.getPokemon(pokemonExternal.getT2())
+                                            .flatMap(pokemonRepository::createPokemon)
+                            )
+                )
+                .parallel();
     }
 }

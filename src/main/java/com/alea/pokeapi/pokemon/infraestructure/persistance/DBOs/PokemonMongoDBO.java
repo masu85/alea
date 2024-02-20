@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class PokemonMongoDBO {
 
     @MongoId
-    private final String internalId;
     private final Integer id;
     private final String name;
     private final Integer height;
