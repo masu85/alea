@@ -10,17 +10,16 @@ import java.util.Comparator;
 
 @Service
 @RequiredArgsConstructor
-public class GetMoreBaseExperiencePokemon {
+public class GetMoreBaseExperiencePokemonUseCase {
     private final int NUM_MORE_BASE_EXPERIENCE_POKEMON = 5;
     private final PokemonRepository pokemonRepository;
     private final UpdatePokemonListUseCase updatePokemonListUseCase;
 
-    public Flux<Pokemon> getMoreBaseExperience() {
+    public Flux<Pokemon> getMoreBaseExperiencePokemon() {
 
-        updatePokemonListUseCase.updateList();
-
-        return pokemonRepository.getAll()
-                .sort(Comparator.comparingInt(Pokemon::getBaseExperience).reversed())
-                .take(NUM_MORE_BASE_EXPERIENCE_POKEMON);
+        return updatePokemonListUseCase.updateList()
+                .thenMany(pokemonRepository.getAll()
+                        .sort(Comparator.comparingInt(Pokemon::getBaseExperience).reversed())
+                        .take(NUM_MORE_BASE_EXPERIENCE_POKEMON));
     }
 }

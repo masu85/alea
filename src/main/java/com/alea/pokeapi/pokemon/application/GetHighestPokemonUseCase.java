@@ -15,12 +15,11 @@ public class GetHighestPokemonUseCase {
     private final PokemonRepository pokemonRepository;
     private final UpdatePokemonListUseCase updatePokemonListUseCase;
 
-    public Flux<Pokemon> getHighest() {
+    public Flux<Pokemon> getHighestPokemon() {
 
-        updatePokemonListUseCase.updateList();
-
-        return pokemonRepository.getAll()
-                .sort(Comparator.comparingInt(Pokemon::getHeight).reversed())
-                .take(NUM_HIGHEST_POKEMON);
+        return updatePokemonListUseCase.updateList()
+                .thenMany(pokemonRepository.getAll()
+                        .sort(Comparator.comparingInt(Pokemon::getHeight).reversed())
+                        .take(NUM_HIGHEST_POKEMON));
     }
 }

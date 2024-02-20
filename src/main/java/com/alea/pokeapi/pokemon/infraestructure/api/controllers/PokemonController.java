@@ -1,42 +1,51 @@
 package com.alea.pokeapi.pokemon.infraestructure.api.controllers;
 
 import com.alea.pokeapi.pokemon.application.*;
-import com.alea.pokeapi.pokemon.infraestructure.clients.PokeApiClient;
+import com.alea.pokeapi.pokemon.infraestructure.api.DTOs.HeaviestPokemonDTO;
+import com.alea.pokeapi.pokemon.infraestructure.api.DTOs.HighestPokemonDTO;
+import com.alea.pokeapi.pokemon.infraestructure.api.DTOs.MoreBaseExperiencePokemonDTO;
+import com.alea.pokeapi.pokemon.infraestructure.api.DTOs.mappers.PokemonAPIMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
+@Slf4j
 @RestController
 @RequestMapping("/pokemon")
 @RequiredArgsConstructor
 public class PokemonController {
 
-    private final PokeApiClient pokeApiClient;
-    private final CreatePokemonUseCase createPokemonUseCase;
     private final GetHeaviestPokemonsUseCase getHeaviestPokemonsUseCase;
     private final GetHighestPokemonUseCase getHighestPokemonUseCase;
-    private final GetMoreBaseExperiencePokemon getMoreBaseExperiencePokemon;
-    private final UpdatePokemonListUseCase updatePokemonListUseCase;
-    private final Lock updateLock;
+    private final GetMoreBaseExperiencePokemonUseCase getMoreBaseExperiencePokemonUseCase;
+    private final PokemonAPIMapper pokemonAPIMapper;
 
-    @GetMapping
-    public void test() {
-        Instant start = Instant.now();
-        //System.out.println(pokeApiClient.countPokemon().block());
-        //System.out.println(pokeApiClient.getPokemon(6).flatMap(createPokemonUseCase::createPokemon).block());
+    @GetMapping("/heaviest")
+    public Flux<HeaviestPokemonDTO> getHeaviest() {
+        return getHeaviestPokemonsUseCase.getHeaviestPokemon()
+                .map(pokemonAPIMapper::pokemonToHeaviestPokemon)
+                .doOnError(throwable -> log.error("Exception executing getHeaviestPokemon", throwable))
+                .onErrorResume(error -> Flux.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected API error: " + error.getMessage())));
+    }
 
-        //updatePokemonListUseCase.updateList();
+    @GetMapping("/highest")
+    public Flux<HighestPokemonDTO> getHigest() {
+        return getHighestPokemonUseCase.getHighestPokemon()
+                .map(pokemonAPIMapper::pokemonToHighestPokemon)
+                .doOnError(throwable -> log.error("Exception executing getHighestPokemon", throwable))
+                .onErrorResume(error -> Flux.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected API error: " + error.getMessage())));
+    }
 
-        getHeaviestPokemonsUseCase.getHeaviestPokemon().doOnNext(pokemon -> System.out.println(pokemon.getName() + " - " + pokemon.getWeight())).blockLast();
-        getHighestPokemonUseCase.getHighest().doOnNext(pokemon -> System.out.println(pokemon.getName() + " - " + pokemon.getHeight())).blockLast();
-        getMoreBaseExperiencePokemon.getMoreBaseExperience().doOnNext(pokemon -> System.out.println(pokemon.getName() + " - " + pokemon.getBaseExperience())).blockLast();
-        Instant end = Instant.now();
-        System.out.println(Duration.between(start, end).toMillis());
+    @GetMapping("/experience")
+    public Flux<MoreBaseExperiencePokemonDTO> getMoreBaseExperience() {
+        return getMoreBaseExperiencePokemonUseCase.getMoreBaseExperiencePokemon()
+                .map(pokemonAPIMapper::pokemonToMoreBaseExperiencePokemon)
+                .doOnError(throwable -> log.error("Exception executing getMoreBaseExperiencePokemon", throwable))
+                .onErrorResume(error -> Flux.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected API error: " + error.getMessage())));
     }
 }

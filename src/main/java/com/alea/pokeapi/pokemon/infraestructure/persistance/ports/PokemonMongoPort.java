@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @Repository
 @RequiredArgsConstructor
 @ConditionalOnProperty(value = "pokeapi.database-port", havingValue = "mongo")
@@ -22,23 +20,12 @@ public class PokemonMongoPort implements PokemonRepository {
 
     @Override
     public Mono<Pokemon> createPokemon(Pokemon pokemon) {
-        //System.out.println(pokemon.getName());
         var pokemonDBO = pokemonDataBaseMapper.pokemonToDataBase(pokemon);
         return pokemonDataBaseAdapter.save(pokemonDBO).map(pokemonDataBaseMapper::dataBaseToPokemon);
-    }
-
-    public Flux<Pokemon> createAll(List<Pokemon> pokemonList) {
-        return pokemonDataBaseAdapter.saveAll(pokemonList.stream().map(pokemonDataBaseMapper::pokemonToDataBase).toList())
-                .map(pokemonDataBaseMapper::dataBaseToPokemon);
     }
 
     @Override
     public Flux<Pokemon> getAll() {
         return pokemonDataBaseAdapter.findAll().map(pokemonDataBaseMapper::dataBaseToPokemon);
-    }
-
-    @Override
-    public Mono<Boolean> existById(Integer id) {
-        return pokemonDataBaseAdapter.existsById(String.valueOf(id));
     }
 }

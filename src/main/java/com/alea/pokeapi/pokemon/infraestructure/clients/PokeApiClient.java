@@ -39,14 +39,6 @@ public class PokeApiClient implements PokemonExternalData {
         this.pokemonPokeApiClientMapper = pokemonPokeApiClientMapper;
     }
 
-    public Mono<Pokemon> getPokemon(Integer id) {
-        return webClient.get()
-                .uri(URI.create(format("%s/pokemon/%s", baseUri, id)))
-                .retrieve()
-                .bodyToMono(PokemonDetailDTO.class)
-                .map(pokemonPokeApiClientMapper::pokeApiToPokemon);
-    }
-
     @Override
     public Mono<Integer> countPokemon() {
         return webClient.get()

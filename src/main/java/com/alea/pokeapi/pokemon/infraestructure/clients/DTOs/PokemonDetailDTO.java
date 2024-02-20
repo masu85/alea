@@ -5,7 +5,6 @@ import lombok.*;
 @Getter
 @Builder
 public class PokemonDetailDTO {
-
     private final Integer id;
     private final String name;
     private final Integer height;
