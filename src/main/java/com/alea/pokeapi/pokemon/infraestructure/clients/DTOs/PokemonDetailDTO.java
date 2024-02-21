@@ -1,6 +1,7 @@
 package com.alea.pokeapi.pokemon.infraestructure.clients.DTOs;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder

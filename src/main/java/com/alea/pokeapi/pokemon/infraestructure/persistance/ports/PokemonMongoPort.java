@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 
 @Repository
 @RequiredArgsConstructor
-//@ConditionalOnProperty(value = "pokeapi.database-port", havingValue = "mongo")
 public class PokemonMongoPort implements PokemonRepository {
 
     private final PokemonMongoMapper pokemonDataBaseMapper;

@@ -3,9 +3,7 @@ package com.alea.pokeapi.pokemon.application;
 import com.alea.pokeapi.pokemon.domain.Pokemon;
 import com.alea.pokeapi.pokemon.domain.PokemonRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 
 import java.util.Comparator;

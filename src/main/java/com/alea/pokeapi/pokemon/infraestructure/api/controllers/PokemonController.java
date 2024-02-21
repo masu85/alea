@@ -1,6 +1,8 @@
 package com.alea.pokeapi.pokemon.infraestructure.api.controllers;
 
-import com.alea.pokeapi.pokemon.application.*;
+import com.alea.pokeapi.pokemon.application.GetHeaviestPokemonsUseCase;
+import com.alea.pokeapi.pokemon.application.GetHighestPokemonUseCase;
+import com.alea.pokeapi.pokemon.application.GetMoreBaseExperiencePokemonUseCase;
 import com.alea.pokeapi.pokemon.infraestructure.api.DTOs.HeaviestPokemonDTO;
 import com.alea.pokeapi.pokemon.infraestructure.api.DTOs.HighestPokemonDTO;
 import com.alea.pokeapi.pokemon.infraestructure.api.DTOs.MoreBaseExperiencePokemonDTO;
