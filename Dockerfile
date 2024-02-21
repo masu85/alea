@@ -11,7 +11,9 @@ RUN mvn dependency:go-offline
 
 COPY . ./
 RUN mvn clean package && \
-    mv $(find /root/target/ -type f -name '*.jar' -a ! -name '*-javadoc.jar' -a ! -name '*-sources.jar' -a ! -name '*-tests.jar') /root/target/app.jar
+    mv $(find /root/target/ -type f -name '*.jar' -a ! -name '*-javadoc.jar' -a ! -name '*-sources.jar' -a ! -name '*-tests.jar') /root/target/app.jar && \
+    curl -Ls https://coverage.codacy.com/get.sh | sh
+
 
 
 FROM openjdk:21-jdk-slim

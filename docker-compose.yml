@@ -16,10 +16,3 @@ services:
     restart: on-failure
     ports:
       - "27017:27017"
-    networks:
-      default:
-
-networks:
-  default:
-    name: alea_backend
-    external: false

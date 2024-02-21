@@ -52,4 +52,41 @@ class GetHeaviestPokemonsUseCaseTest {
         assertThat(results.get(3).getId()).isEqualTo(4);
         assertThat(results.get(4).getId()).isEqualTo(3);
     }
+
+    @Test
+    public void getHeaviestPokemon_less_than_five() {
+
+        var pk1 = Pokemon.builder().id(1).name("a").weight(1).build();
+        var pk2 = Pokemon.builder().id(2).name("b").weight(2).build();
+        var pk3 = Pokemon.builder().id(3).name("c").weight(3).build();
+
+        when(updatePokemonListUseCase.updateList()).thenReturn(Flux.empty());
+        when(pokemonRepository.getAll()).thenReturn(Flux.just(pk1, pk2, pk3));
+
+        var results = getHeaviestPokemonsUseCase.getHeaviestPokemon().collectList().block();
+
+        verify(updatePokemonListUseCase).updateList();
+        verify(pokemonRepository).getAll();
+
+        assertThat(results).isNotNull();
+        assertThat(results.size()).isEqualTo(3);
+        assertThat(results.get(0).getId()).isEqualTo(3);
+        assertThat(results.get(1).getId()).isEqualTo(2);
+        assertThat(results.get(2).getId()).isEqualTo(1);
+    }
+
+    @Test
+    public void getHeaviestPokemon_without_pokemon() {
+
+        when(updatePokemonListUseCase.updateList()).thenReturn(Flux.empty());
+        when(pokemonRepository.getAll()).thenReturn(Flux.empty());
+
+        var results = getHeaviestPokemonsUseCase.getHeaviestPokemon().collectList().block();
+
+        verify(updatePokemonListUseCase).updateList();
+        verify(pokemonRepository).getAll();
+
+        assertThat(results).isNotNull();
+        assertThat(results.size()).isEqualTo(0);
+    }
 }

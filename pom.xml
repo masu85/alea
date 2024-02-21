@@ -19,6 +19,7 @@
         <java.version>21</java.version>
         <map-struct.version>1.5.5.Final</map-struct.version>
         <map-struct-processor.version>1.5.5.Final</map-struct-processor.version>
+        <test-mongo.version>4.12.2</test-mongo.version>
     </properties>
 
     <dependencies>
@@ -54,6 +55,12 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>${test-mongo.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

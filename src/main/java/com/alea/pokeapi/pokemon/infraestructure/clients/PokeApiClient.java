@@ -41,6 +41,7 @@ public class PokeApiClient implements PokemonExternalData {
 
     @Override
     public Mono<Integer> countPokemon() {
+
         return webClient.get()
                 .uri(URI.create(format("%s/pokemon/?offset=0&limit=1", baseUri)))
                 .retrieve()
@@ -60,11 +61,11 @@ public class PokeApiClient implements PokemonExternalData {
 
     @Override
     @SneakyThrows
-    public Flux<Pokemon> getPokemon(String url) {
+    public Mono<Pokemon> getPokemon(String url) {
         return webClient.get()
                 .uri(url)
                 .retrieve()
-                .bodyToFlux(String.class)
+                .bodyToMono(String.class)
                 .map(this::parsePokemonDetails)
                 .map(pokemonPokeApiClientMapper::pokeApiToPokemon);
     }

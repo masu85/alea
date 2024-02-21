@@ -7,5 +7,5 @@ import reactor.util.function.Tuple2;
 public interface PokemonExternalData {
     Mono<Integer> countPokemon();
     Flux<Tuple2<String, String>> getExistingPokemons(Integer offset, Integer limit);
-    Flux<Pokemon> getPokemon(String url);
+    Mono<Pokemon> getPokemon(String url);
 }

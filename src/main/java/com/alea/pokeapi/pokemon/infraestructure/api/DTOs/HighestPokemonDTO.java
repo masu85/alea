@@ -8,5 +8,5 @@ import lombok.Getter;
 public class HighestPokemonDTO {
     private final Integer id;
     private final String name;
-    private final Integer weight;
+    private final Integer height;
 }
