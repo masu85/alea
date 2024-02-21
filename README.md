@@ -21,13 +21,27 @@ Using PokéAPI (https://pokeapi.co/api/v2/), expose an API with following scenar
 
 # Setup
 
-To run this application, you need to have Docker installed and running to create images and containers.
+To run this application, you need to have Maven, Java 21, and Docker installed and running to create images and containers.
 
 # Run
 
-With Docker running, open a console and execute the following command:  
+With Docker running, open a console navigate to app directory and execute the following command to start MongoDB:  
 
-    docker compose up   
+    docker compose up -d   
+
+With MongoDB running, execute: 
+
+    mvn clean spring-boot:run  
+
+# Testing
+
+For testing, the commands are similar:
+
+    docker compose up -d   
+
+With MongoDB running, execute:
+
+    mvn clean test 
 
 # Endpoints
 

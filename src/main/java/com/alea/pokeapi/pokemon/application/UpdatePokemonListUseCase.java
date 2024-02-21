@@ -6,6 +6,7 @@ import com.alea.pokeapi.pokemon.domain.PokemonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -13,12 +14,15 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class UpdatePokemonListUseCase {
 
+    private final Environment environment;
     private final PokemonRepository pokemonRepository;
     private final PokemonExternalData pokemonExternalData;
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
-        updateList().blockLast();
+
+        if(environment == null || environment.getActiveProfiles().length == 0 || !environment.getActiveProfiles()[0].equals("DBTest"))
+            updateList().blockLast();
     }
 
     public Flux<Pokemon> updateList() {

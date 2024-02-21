@@ -7,19 +7,13 @@ services:
     restart: on-failure
     ports:
       - 27017:27017
-    networks:
-      - network-reactive
 
-  poke-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
-    depends_on:
-      - mongodb
-    networks:
-      - network-reactive
+    #  poke-api:
+      #build:
+      #   context: .
+    #     dockerfile: Dockerfile
+      #   ports:
+    #     - 8080:8080
+      #  networks:
+    #   - network-reactive
 
-networks:
-  network-reactive:
