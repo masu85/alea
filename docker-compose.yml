@@ -1,18 +1,25 @@
 services:
 
-  poke-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongodb
-
   mongodb:
     #We use this version to avoid AVX error (https://codehammer.io/proxmox-mongodb-5-0-requires-a-cpu-with-avx-support/).
     #If you have modern CPU feel free to update Mongo Version
     image: mongo:4.4.18
     restart: on-failure
     ports:
-      - "27017:27017"
+      - 27017:27017
+    networks:
+      - network-reactive
+
+  poke-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongodb
+    networks:
+      - network-reactive
+
+networks:
+  network-reactive:

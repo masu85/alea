@@ -5,14 +5,13 @@ import com.alea.pokeapi.pokemon.domain.PokemonRepository;
 import com.alea.pokeapi.pokemon.infraestructure.persistance.DBOs.mappers.PokemonMongoMapper;
 import com.alea.pokeapi.pokemon.infraestructure.persistance.adapters.PokemonMongoAdapter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
 @RequiredArgsConstructor
-@ConditionalOnProperty(value = "pokeapi.database-port", havingValue = "mongo")
+//@ConditionalOnProperty(value = "pokeapi.database-port", havingValue = "mongo")
 public class PokemonMongoPort implements PokemonRepository {
 
     private final PokemonMongoMapper pokemonDataBaseMapper;

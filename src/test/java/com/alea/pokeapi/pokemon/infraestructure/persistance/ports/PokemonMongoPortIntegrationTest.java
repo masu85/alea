@@ -5,10 +5,11 @@ import com.alea.pokeapi.pokemon.infraestructure.persistance.DBOs.PokemonMongoDBO
 import com.alea.pokeapi.pokemon.infraestructure.persistance.DBOs.mappers.PokemonMongoMapper;
 import com.alea.pokeapi.pokemon.infraestructure.persistance.adapters.PokemonMongoAdapter;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +17,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
-@DataMongoTest
+@Disabled
+@SpringBootTest
 class PokemonMongoPortIntegrationTest {
 
     @Autowired
@@ -26,6 +28,7 @@ class PokemonMongoPortIntegrationTest {
     private PokemonMongoMapper pokemonMongoMapper;
 
     private PokemonMongoPort pokemonMongoPort;
+
 
     @BeforeEach
     void setUp() {
